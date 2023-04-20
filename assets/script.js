@@ -1,111 +1,114 @@
 const slides = [
 	{
-		"image": "slide1.jpg",
-		"tagLine": "Impressions tous formats <span>en boutique et en ligne</span>"
+		image: "slide1.jpg",
+		tagLine: "Impressions tous formats <span>en boutique et en ligne</span>",
 	},
 	{
-		"image": "slide2.jpg",
-		"tagLine": "Tirages haute définition grand format <span>pour vos bureaux et events</span>"
+		image: "slide2.jpg",
+		tagLine:
+			"Tirages haute définition grand format <span>pour vos bureaux et events</span>",
 	},
 	{
-		"image": "slide3.jpg",
-		"tagLine": "Grand choix de couleurs <span>de CMJN aux pantones</span>"
+		image: "slide3.jpg",
+		tagLine: "Grand choix de couleurs <span>de CMJN aux pantones</span>",
 	},
 	{
-		"image": "slide4.png",
-		"tagLine": "Autocollants <span>avec découpe laser sur mesure</span>"
-	}
-]
-
-
-
-
+		image: "slide4.png",
+		tagLine: "Autocollants <span>avec découpe laser sur mesure</span>",
+	},
+];
 
 /* Déclaration des variable globales */
 
-const rightArrow = document.querySelector('.arrow_right')
-const leftArrow = document.querySelector('.arrow_left')
-const banner = document.querySelector('#banner')
-const dots = document.querySelectorAll('.dot');
-dots[0].classList.add('dot_selected');
-let slidePosition = 0
+("use strict");
+
+const rightArrow = document.querySelector(".arrow_right");
+const leftArrow = document.querySelector(".arrow_left");
+const banner = document.querySelector("#banner");
+const dots = document.querySelector('.dots');
+
+let slidePosition = 0;
+
 
 /* Création de l'élement et mise en place de l'image */
 
-const img = document.createElement('img')
-banner.insertAdjacentElement('afterbegin', img)
+const img = document.createElement("img");
+banner.insertAdjacentElement("afterbegin", img);
 
 /* Création de l'élement et mise en place du texte */
 
-const para = document.createElement('p')
-banner.insertAdjacentElement('afterbegin', para)
-
-
-/*Appel de la fonction pour l'affichage lors du 1er démarrage*/
-
-imgAppears()
-
+const para = document.createElement("p");
+banner.insertAdjacentElement("afterbegin", para);
 
 /*fonction pour le défillement des images*/
 
+const imgAppears = (slidePosition) => {
+	img.src = "./assets/images/slideshow/" + slides[slidePosition].image;
+	para.innerHTML = slides[slidePosition].tagLine;
+	img.classList.add("banner-img");
+};
 
-function imgAppears() {
-	img.innerHTML = img.src = "./assets/images/slideshow/" + slides[slidePosition].image
-	para.innerHTML = slides[slidePosition].tagLine
-	img.classList.add('banner-img')
-}
-
-
-/*fonction pour le positionnement des points*/
+imgAppears(slidePosition);
 
 
-function dotsPosition() {
 
-	for (let i = 0; i < dots.length; i++) {
+/* intégration des "dots" */
+
+const dotsAppears = () => {
+	const dot = document.createElement("div");
+	dot.classList.add('dot');
+	dots.insertAdjacentElement('afterbegin', dot);
+};
+
+for (let i = 0; i < slides.length; i++) {
+	dotsAppears();
+};
+
+
+
+
+
+/* mise en place du systéme de mouvement des "dots"*/
+
+
+const dotsBis = document.querySelectorAll('.dot')
+dotsBis[0].classList.add('dot_selected')
+
+
+const dotsPosition = (slidePosition) => {
+	for (let i = 0; i < slides.length; i++) {
 		if (i === slidePosition) {
-			dots[i].classList.add('dot_selected');
+			dotsBis[i].classList.add('dot_selected');
 		} else {
-			dots[i].classList.remove('dot_selected');
+			dotsBis[i].classList.remove('dot_selected');
 		}
 	}
-
-}
+};
 
 
 /*Event click Droit*/
 
-
-rightArrow.addEventListener('click', () => {
-
-	if (slidePosition === 3) {
-		slidePosition = 0
+rightArrow.addEventListener("click", () => {
+	if (slidePosition > slides.length - 2) {
+		slidePosition = 0;
 	} else {
-		slidePosition++
+		slidePosition++;
 	}
+	imgAppears(slidePosition);
+	dotsPosition(slidePosition);
 
-	imgAppears()
-	dotsPosition()
-})
-
+});
 
 /*Event click Gauche*/
 
-
-leftArrow.addEventListener('click', () => {
-
-	slidePosition--
-	if (slidePosition === -1) {
-		slidePosition = 3
+leftArrow.addEventListener("click", () => {
+	slidePosition--;
+	if (slidePosition < 0) {
+		slidePosition = slides.length - 1;
 	}
 
-	imgAppears()
-	dotsPosition()
+	imgAppears(slidePosition);
+	dotsPosition(slidePosition);
 
-})
-
-
-
-
-
-
+});
 
